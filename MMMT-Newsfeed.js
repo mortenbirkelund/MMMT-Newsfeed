@@ -87,7 +87,37 @@ Module.register("MMMT-Newsfeed",{
 		if (this.activeItem >= this.newsItems.length) {
 			this.activeItem = 0;
 		}
+		
+		//Adding the arrows
+		var arrowLeft = document.createElement("i");
+		var arrowRight = document.createElement("i");
+		var self = this;
+		
+		arrowLeft.className = "fa fa-angle-left fa-2x";
+		arrowLeft.style.display = "inline-block";
+		arrowLeft.style.float = "left";
+		arrowLeft.style.width = "5%";
+		arrowLeft.addEventListener("click", function () {
+            self.activeItem--;
+			self.updateDom(self.config.animationSpeed);
+            });
 
+		
+		arrowRight.className = "fa fa-angle-right fa-2x";
+		arrowRight.style.display = "inline-block";
+		arrowRight.style.float = "right";
+		arrowRight.style.width = "5%";
+		arrowRight.addEventListener("click", function () {
+            self.activeItem++;
+			self.updateDom(self.config.animationSpeed);
+            });
+		
+		
+		// Create a div for all the content between the arrows
+		var div = document.createElement("div");
+		div.style.display = "inline-block";
+		div.style.width = "90%";
+		
 		if (this.newsItems.length > 0) {
 
 			if (this.config.showSourceTitle || this.config.showPublishDate) {
@@ -107,7 +137,7 @@ Module.register("MMMT-Newsfeed",{
 					sourceAndTimestamp.innerHTML += ":";
 				}
 
-				wrapper.appendChild(sourceAndTimestamp);
+				div.appendChild(sourceAndTimestamp);
 			}
 
 			//Remove selected tags from the beginning of rss feed items (title or description)
@@ -152,19 +182,21 @@ Module.register("MMMT-Newsfeed",{
 				}
 
 			}
-
+			
 			var title = document.createElement("div");
 			title.className = "bright medium light";
 			title.innerHTML = this.newsItems[this.activeItem].title;
-			wrapper.appendChild(title);
+			div.appendChild(title);
 
 			if (this.config.showDescription) {
 				var description = document.createElement("div");
 				description.className = "small light";
 				description.innerHTML = this.newsItems[this.activeItem].description;
-				wrapper.appendChild(description);
+				div.appendChild(description);
 			}
-
+			wrapper.appendChild(arrowLeft);
+			wrapper.appendChild(div);
+			wrapper.appendChild(arrowRight);
 		} else {
 			wrapper.innerHTML = this.translate("LOADING");
 			wrapper.className = "small dimmed";
