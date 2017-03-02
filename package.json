@@ -1,0 +1,27 @@
+{
+  "name": "mmmt-newsfeed",
+  "version": "1.0.0",
+  "description": "Touch version of the official MagicMirror2 newsfeed module",
+  "main": "MMMT-Newsfeed.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mortenbirkelund/MMMT-Newsfeed.git"
+  },
+  "keywords": [
+    "Touch",
+    "MagicMirror2",
+    "module"
+  ],
+  "author": "Morten Birkelund Olsen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mortenbirkelund/MMMT-Newsfeed/issues"
+  },
+  "homepage": "https://github.com/mortenbirkelund/MMMT-Newsfeed#readme",
+  "dependencies": {
+    "swiper": "^3.4.1"
+  }
+}
