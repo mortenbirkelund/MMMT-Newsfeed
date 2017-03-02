@@ -112,6 +112,7 @@ Module.register("MMMT-Newsfeed",{
 		return container2;
 		*/
 		//TEST	
+		var swiper = new Swiper('.swiper-container');
 		
 		var container = document.createElement("div");
 		container.className = "swiper-container";
@@ -260,7 +261,7 @@ Module.register("MMMT-Newsfeed",{
 		}
 
 		container.appendChild(wrapper);
-		this.swiper = new Swiper('.swiper-container');
+		
 		return container;
 	},
 
