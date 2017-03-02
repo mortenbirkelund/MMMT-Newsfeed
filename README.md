@@ -15,12 +15,12 @@ Clone this repository:
 git clone https://github.com/mortenbirkelund/MMMT-Newsfeed
 ````
 
-go to the newly created folder
+Go to the newly created folder:
 ````
 cd MMMT-Newsfeed
 ````
 
-Install the dependencies (swiper)
+Install the dependencies: (swiper)
 ````
 npm install
 ````
