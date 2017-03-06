@@ -246,8 +246,8 @@ Module.register("MMMT-Newsfeed",{
 				var self = this;
 				
 				div.addEventListener("click", function () {
-					//self.sendNotification("OPEN_URL",url)
-					window.open(url,"","menubar=no,left=50%,scrollbars=yes,width=600,height=1000",true);
+					self.sendNotification("OPEN_URL",url)
+					//window.open(url,"","menubar=no,left=50%,scrollbars=yes,width=600,height=1000",true);
 
 				});
 	
