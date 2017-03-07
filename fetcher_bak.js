@@ -1,7 +1,8 @@
 /* Magic Mirror
- * Fetcher
+ * Module: MMMT-NewsFeed (Magic Mirror Module Touch)
  *
- * By Michael Teeuw http://michaelteeuw.nl
+ * By Morten Birkelund
+ * Based on the work of Michael Teeuw http://michaelteeuw.nl
  * MIT Licensed.
  */
 

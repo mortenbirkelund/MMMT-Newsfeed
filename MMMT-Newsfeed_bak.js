@@ -1,9 +1,10 @@
 /* global Module */
 
 /* Magic Mirror
- * Module: NewsFeed
+ * Module: MMMT-NewsFeed (Magic Mirror Module Touch)
  *
- * By Michael Teeuw http://michaelteeuw.nl
+ * By Morten Birkelund
+ * Based on the work of Michael Teeuw http://michaelteeuw.nl
  * MIT Licensed.
  */
 
@@ -13,7 +14,7 @@ Module.register("MMMT-Newsfeed",{
 	defaults: {
 		feeds: [
 			{
-				title: "Mazhar's Blog",
+				title: "New York Times",
 				url: "http://mightymaze.github.io/feed.xml",
 				encoding: "UTF-8" //ISO-8859-1
 			}
@@ -22,7 +23,7 @@ Module.register("MMMT-Newsfeed",{
 		showPublishDate: true,
 		showDescription: false,
 		reloadInterval:  5 * 60 * 1000, // every 5 minutes
-		updateInterval: 10 * 1000,
+		updateInterval: 1 * 1000,
 		animationSpeed: 2.5 * 1000,
 		maxNewsItems: 0, // 0 for unlimited
 		removeStartTags: "",
@@ -69,8 +70,8 @@ Module.register("MMMT-Newsfeed",{
 		this.activeItem = 0;
 
 		this.registerFeeds();
-
 	},
+
 
 	// Override socket notification handler.
 	socketNotificationReceived: function(notification, payload) {
@@ -78,15 +79,22 @@ Module.register("MMMT-Newsfeed",{
 			this.generateFeed(payload);
 
 			if (!this.loaded) {
-				this.scheduleUpdateInterval();
+				this.scheduleUpdateInterval();	// <--------- look for here
 			}
 
 			this.loaded = true;
 		}
 	},
 
+
 	// Override dom generator.
 	getDom: function() {
+
+		// to track how many times it is redrawn
+		// Log.info('Called on ' + Date());
+
+		// =================================================================================================
+
 		var wrapper = document.createElement("div");
 
 		if (this.config.feedUrl) {
@@ -99,7 +107,9 @@ Module.register("MMMT-Newsfeed",{
 			this.activeItem = 0;
 		}
 
+
 		if (this.newsItems.length > 0) {
+			
 
 			if (this.config.showSourceTitle || this.config.showPublishDate) {
 				var sourceAndTimestamp = document.createElement("div");
@@ -182,6 +192,195 @@ Module.register("MMMT-Newsfeed",{
 		}
 
 		return wrapper;
+
+		//=============================================================================================
+
+
+		// if loaded, return what is loaded
+		// var swiper = new Swiper('.swiper-container');
+		// if (!this.mySwiper) {
+		// 	this.mySwiper = new Swiper ('.swiper-container', {
+	  //     // Optional parameters
+	  //     direction: 'horizontal',
+	  //     loop: true
+	  //   });
+		// }
+		//
+		// var container2 = document.createElement("div");
+		// container2.className = "swiper-container";
+		//
+		// var wrapper2 = document.createElement("div");
+		// wrapper2.className = "swiper-wrapper";
+		//
+		// for (var i = 0; i < 5; i++){
+		// 	var Slide2 = document.createElement("div");
+		// 	Slide2.className = "swiper-slide";
+		//
+		// 	Slide2.innerHTML = "Test";
+		// 	wrapper2.appendChild(Slide2);
+		// }
+		// container2.appendChild(wrapper2);
+		//
+		// this.inserted = true;
+		//
+		// return container2;
+
+		// =========================================================================
+		//TEST
+		// var swiper = new Swiper('.swiper-container');
+
+		// if (!this.mySwiper) {
+		// 	this.mySwiper = new Swiper ('.swiper-container', {
+	  //     // Optional parameters
+	  //     direction: 'horizontal',
+	  //     loop: true
+	  //   });
+		// }
+
+		var container = document.createElement("div");
+		container.className = "swiper-container";
+		var wrapper = document.createElement("div");
+		wrapper.className = "swiper-wrapper";
+
+		if (this.config.feedUrl) {
+			wrapper.className = "small bright";
+			wrapper.innerHTML = "The configuration options for the newsfeed module have changed.<br>Please check the documentation.";
+			return wrapper;
+		}
+
+		if (this.activeItem >= this.newsItems.length) {
+			this.activeItem = 0;
+		}
+
+		//Adding the arrows
+		var arrowLeft = document.createElement("i");
+		var arrowRight = document.createElement("i");
+		var self = this;
+
+		arrowLeft.className = "fa fa-angle-left fa-2x";
+		arrowLeft.style.display = "inline-block";
+		arrowLeft.style.float = "left";
+		arrowLeft.style.width = "5%";
+		arrowLeft.addEventListener("click", function () {
+      self.activeItem--;
+			self.updateDom(self.config.animationSpeed);
+    });
+
+
+		arrowRight.className = "fa fa-angle-right fa-2x";
+		arrowRight.style.display = "inline-block";
+		arrowRight.style.float = "right";
+		arrowRight.style.width = "5%";
+		arrowRight.addEventListener("click", function () {
+      self.activeItem++;
+			self.updateDom(self.config.animationSpeed);
+    });
+
+		if (this.newsItems.length > 0) {
+			for (var i = 0; i < this.newsItems.length; i++) {
+				// Create a div for all the content between the arrows
+				var div = document.createElement("div");
+				//div.style.display = "inline-block";
+				//div.style.width = "90%";
+				div.className = "swiper-slide";
+
+				if (this.config.showSourceTitle || this.config.showPublishDate) {
+					var sourceAndTimestamp = document.createElement("div");
+					sourceAndTimestamp.className = "light small dimmed";
+
+					if (this.config.showSourceTitle && this.newsItems[this.activeItem].sourceTitle !== "") {
+						sourceAndTimestamp.innerHTML = this.newsItems[this.activeItem].sourceTitle;
+					}
+					if (this.config.showSourceTitle && this.newsItems[this.activeItem].sourceTitle !== "" && this.config.showPublishDate) {
+						sourceAndTimestamp.innerHTML += ", ";
+					}
+					if (this.config.showPublishDate) {
+						sourceAndTimestamp.innerHTML += moment(new Date(this.newsItems[this.activeItem].pubdate)).fromNow();
+					}
+					if (this.config.showSourceTitle && this.newsItems[this.activeItem].sourceTitle !== "" || this.config.showPublishDate) {
+						sourceAndTimestamp.innerHTML += ":";
+					}
+
+					div.appendChild(sourceAndTimestamp);
+				}
+
+				//Remove selected tags from the beginning of rss feed items (title or description)
+
+				if (this.config.removeStartTags == "title" || "both") {
+
+					for (f=0; f<this.config.startTags.length;f++) {
+						if (this.newsItems[this.activeItem].title.slice(0,this.config.startTags[f].length) == this.config.startTags[f]) {
+							this.newsItems[this.activeItem].title = this.newsItems[this.activeItem].title.slice(this.config.startTags[f].length,this.newsItems[this.activeItem].title.length);
+						}
+					}
+
+				}
+
+				if (this.config.removeStartTags == "description" || "both") {
+
+					if (this.config.showDescription) {
+						for (f=0; f<this.config.startTags.length;f++) {
+							if (this.newsItems[this.activeItem].description.slice(0,this.config.startTags[f].length) == this.config.startTags[f]) {
+								this.newsItems[this.activeItem].title = this.newsItems[this.activeItem].description.slice(this.config.startTags[f].length,this.newsItems[this.activeItem].description.length);
+							}
+						}
+					}
+
+				}
+
+				//Remove selected tags from the end of rss feed items (title or description)
+
+				if (this.config.removeEndTags) {
+					for (f=0; f<this.config.endTags.length;f++) {
+						if (this.newsItems[this.activeItem].title.slice(-this.config.endTags[f].length)==this.config.endTags[f]) {
+							this.newsItems[this.activeItem].title = this.newsItems[this.activeItem].title.slice(0,-this.config.endTags[f].length);
+						}
+					}
+
+					if (this.config.showDescription) {
+						for (f=0; f<this.config.endTags.length;f++) {
+							if (this.newsItems[this.activeItem].description.slice(-this.config.endTags[f].length)==this.config.endTags[f]) {
+								this.newsItems[this.activeItem].description = this.newsItems[this.activeItem].description.slice(0,-this.config.endTags[f].length);
+							}
+						}
+					}
+
+				}
+
+				var title = document.createElement("div");
+				title.className = "bright medium light";
+				title.innerHTML = this.newsItems[this.activeItem].title;
+				div.appendChild(title);
+
+				if (this.config.showDescription) {
+					var description = document.createElement("div");
+					description.className = "small light";
+					description.innerHTML = this.newsItems[this.activeItem].description;
+					div.appendChild(description);
+				}
+
+
+				var url = this.newsItems[this.activeItem].url;
+				var self = this;
+
+				div.addEventListener("click", function () {
+					self.sendNotification("OPEN_URL",url)
+					//window.open(url,"","menubar=no,left=50%,scrollbars=yes,width=600,height=1000",true);
+
+				});
+
+				//wrapper.appendChild(arrowLeft);
+				wrapper.appendChild(div);
+				//wrapper.appendChild(arrowRight);
+			}
+		} else {
+			wrapper.innerHTML = this.translate("LOADING");
+			wrapper.className = "small dimmed";
+		}
+
+		container.appendChild(wrapper);
+
+		return container;
 	},
 
 	/* registerFeeds()
@@ -284,6 +483,5 @@ Module.register("MMMT-Newsfeed",{
 	capitalizeFirstLetter: function(string) {
 		return string.charAt(0).toUpperCase() + string.slice(1);
 	},
-
 
 });
