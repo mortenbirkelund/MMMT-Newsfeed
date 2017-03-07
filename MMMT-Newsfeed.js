@@ -22,7 +22,7 @@ Module.register("MMMT-Newsfeed",{
 		showPublishDate: true,
 		showDescription: false,
 		reloadInterval:  5 * 60 * 1000, // every 5 minutes
-		updateInterval: 10 * 1000,
+		updateInterval: 5 * 60 * 1000,
 		animationSpeed: 2.5 * 1000,
 		maxNewsItems: 0, // 0 for unlimited
 		removeStartTags: "",
@@ -87,7 +87,45 @@ Module.register("MMMT-Newsfeed",{
 
 	// Override dom generator.
 	getDom: function() {
+
+		// test goes here ===========================================================
+
+		var n = Math.floor(Math.random() * 11);
+		var k = Math.floor(Math.random() * 1000000);
+		var uniqId = String.fromCharCode(n) + k;
+
+		var container = document.createElement("div");
+		container.className = 'swiper-container';
+		container.setAttribute('id', uniqId);
+
 		var wrapper = document.createElement("div");
+		wrapper.className = 'swiper-wrapper';
+
+		wrapper.innerHTML = '<div class="swiper-slide">Slide 1</div>'
+							+ '<div class="swiper-slide">Slide 2</div>'
+        					+ '<div class="swiper-slide">Slide 3</div>'
+        					+ '<div class="swiper-button-prev"></div>'
+        					+ '<div class="swiper-button-next"></div>';
+
+		container.appendChild(wrapper);
+
+		
+		// now do my things here
+		var mySwiper = new Swiper ('#' + uniqId, {
+		    loop: true,
+		    
+		    // Navigation arrows
+		    nextButton: '.swiper-button-next',
+		    prevButton: '.swiper-button-prev',
+		});
+
+		return container;
+
+		// ============== ========================================== ================
+
+
+		var wrapper = document.createElement("div");
+		// wrapper.className = 'swiper-wrapper';
 
 		if (this.config.feedUrl) {
 			wrapper.className = "small bright";
@@ -122,7 +160,6 @@ Module.register("MMMT-Newsfeed",{
 			}
 
 			//Remove selected tags from the beginning of rss feed items (title or description)
-
 			if (this.config.removeStartTags == "title" || "both") {
 
 				for (f=0; f<this.config.startTags.length;f++) {
@@ -146,7 +183,6 @@ Module.register("MMMT-Newsfeed",{
 			}
 
 			//Remove selected tags from the end of rss feed items (title or description)
-
 			if (this.config.removeEndTags) {
 				for (f=0; f<this.config.endTags.length;f++) {
 					if (this.newsItems[this.activeItem].title.slice(-this.config.endTags[f].length)==this.config.endTags[f]) {
