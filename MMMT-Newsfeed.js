@@ -101,15 +101,32 @@ Module.register("MMMT-Newsfeed",{
 		var wrapper = document.createElement("div");
 		wrapper.className = 'swiper-wrapper';
 
-		wrapper.innerHTML = '<div class="swiper-slide">Slide 1</div>'
-							+ '<div class="swiper-slide">Slide 2</div>'
-        					+ '<div class="swiper-slide">Slide 3</div>'
-        					+ '<div class="swiper-button-prev"></div>'
-        					+ '<div class="swiper-button-next"></div>';
+		// wrapper.innerHTML = '<div class="swiper-slide">Slide 1</div>'
+		// 					+ '<div class="swiper-slide">Slide 2</div>'
+  //       					+ '<div class="swiper-slide">Slide 3</div>'
+  //       					+ '<div class="swiper-button-prev"></div>'
+  //       					+ '<div class="swiper-button-next"></div>';
+
+        if (this.newsItems.length > 0) {
+        	for (var i = 0; i < this.newsItems.length; i++) {
+        		var elem = document.createElement("div");
+        		elem.className = 'swiper-slide';
+        		elem.innerHTML = this.newsItems [i].title;
+        		wrapper.appendChild(elem);
+        	}
+
+        	var elem = document.createElement("div");
+        	elem.className = 'swiper-button-prev';
+        	wrapper.appendChild(elem);
+
+			elem = document.createElement("div");
+        	elem.className = 'swiper-button-next';
+        	wrapper.appendChild(elem);        	
+        }
 
 		container.appendChild(wrapper);
 
-		
+
 		// now do my things here
 		var mySwiper = new Swiper ('#' + uniqId, {
 		    loop: true,
