@@ -23,6 +23,7 @@ Module.register("MMMT-Newsfeed",{
 		showDescription: false,
 		reloadInterval:  5 * 60 * 1000, // every 5 minutes
 		updateInterval: 5 * 60 * 1000,
+		//updateInterval: 10 * 1000,
 		animationSpeed: 2.5 * 1000,
 		maxNewsItems: 0, // 0 for unlimited
 		removeStartTags: "",
@@ -82,6 +83,18 @@ Module.register("MMMT-Newsfeed",{
 			}
 
 			this.loaded = true;
+
+			// load the slider here
+			setTimeout(function(){
+				// now do my things here
+				var mySwiper = new Swiper ('.swiper-container', {
+				    loop: true,
+				    
+				    // Navigation arrows
+				    // nextButton: '.swiper-button-next',
+				    // prevButton: '.swiper-button-prev',
+				});
+			}, 3000);
 		}
 	},
 
@@ -101,12 +114,6 @@ Module.register("MMMT-Newsfeed",{
 		var wrapper = document.createElement("div");
 		wrapper.className = 'swiper-wrapper';
 
-		// wrapper.innerHTML = '<div class="swiper-slide">Slide 1</div>'
-		// 					+ '<div class="swiper-slide">Slide 2</div>'
-  //       					+ '<div class="swiper-slide">Slide 3</div>'
-  //       					+ '<div class="swiper-button-prev"></div>'
-  //       					+ '<div class="swiper-button-next"></div>';
-
         if (this.newsItems.length > 0) {
         	for (var i = 0; i < this.newsItems.length; i++) {
         		var elem = document.createElement("div");
@@ -115,26 +122,17 @@ Module.register("MMMT-Newsfeed",{
         		wrapper.appendChild(elem);
         	}
 
-        	var elem = document.createElement("div");
-        	elem.className = 'swiper-button-prev';
-        	wrapper.appendChild(elem);
+   //      	var elem = document.createElement("div");
+   //      	elem.className = 'swiper-button-prev';
+   //      	wrapper.appendChild(elem);
 
-			elem = document.createElement("div");
-        	elem.className = 'swiper-button-next';
+			// elem = document.createElement("div");
+   //      	elem.className = 'swiper-button-next';
         	wrapper.appendChild(elem);        	
         }
 
 		container.appendChild(wrapper);
 
-
-		// now do my things here
-		var mySwiper = new Swiper ('#' + uniqId, {
-		    loop: true,
-		    
-		    // Navigation arrows
-		    nextButton: '.swiper-button-next',
-		    prevButton: '.swiper-button-prev',
-		});
 
 		return container;
 
