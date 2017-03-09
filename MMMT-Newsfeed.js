@@ -86,23 +86,23 @@ Module.register("MMMT-Newsfeed",{
 
 			// load the slider here
 			// now do my things here
-			var mySwiper = new Swiper ('.swiper-container', {
-			    loop: true,
+			// var mySwiper = new Swiper ('.swiper-container', {
+			//     loop: true,
 			    
-			    // Navigation arrows
-			    nextButton: '.swiper-button-next',
-			    prevButton: '.swiper-button-prev',
-			});
-			// setTimeout(function(){
-			// 	// now do my things here
-			// 	var mySwiper = new Swiper ('.swiper-container', {
-			// 	    loop: true,
+			//     // Navigation arrows
+			//     nextButton: '.swiper-button-next',
+			//     prevButton: '.swiper-button-prev',
+			// });
+			setTimeout(function(){
+				// now do my things here
+				var mySwiper = new Swiper ('.swiper-container', {
+				    loop: true,
 				    
-			// 	    // Navigation arrows
-			// 	    nextButton: '.swiper-button-next',
-			// 	    prevButton: '.swiper-button-prev',
-			// 	});
-			// }, 1000);
+				    // Navigation arrows
+				    nextButton: '.swiper-button-next',
+				    prevButton: '.swiper-button-prev',
+				});
+			}, 1000);
 		}
 	},
 
