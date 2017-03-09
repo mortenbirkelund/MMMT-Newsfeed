@@ -85,16 +85,24 @@ Module.register("MMMT-Newsfeed",{
 			this.loaded = true;
 
 			// load the slider here
-			setTimeout(function(){
-				// now do my things here
-				var mySwiper = new Swiper ('.swiper-container', {
-				    loop: true,
+			// now do my things here
+			var mySwiper = new Swiper ('.swiper-container', {
+			    loop: true,
+			    
+			    // Navigation arrows
+			    nextButton: '.swiper-button-next',
+			    prevButton: '.swiper-button-prev',
+			});
+			// setTimeout(function(){
+			// 	// now do my things here
+			// 	var mySwiper = new Swiper ('.swiper-container', {
+			// 	    loop: true,
 				    
-				    // Navigation arrows
-				    // nextButton: '.swiper-button-next',
-				    // prevButton: '.swiper-button-prev',
-				});
-			}, 3000);
+			// 	    // Navigation arrows
+			// 	    nextButton: '.swiper-button-next',
+			// 	    prevButton: '.swiper-button-prev',
+			// 	});
+			// }, 1000);
 		}
 	},
 
@@ -103,13 +111,14 @@ Module.register("MMMT-Newsfeed",{
 
 		// test goes here ===========================================================
 
-		var n = Math.floor(Math.random() * 11);
-		var k = Math.floor(Math.random() * 1000000);
-		var uniqId = String.fromCharCode(n) + k;
-
 		var container = document.createElement("div");
 		container.className = 'swiper-container';
-		container.setAttribute('id', uniqId);
+
+		if (this.config.feedUrl) {
+			container.className = "small bright";
+			container.innerHTML = "The configuration options for the newsfeed module have changed.<br>Please check the documentation.";
+			return container;
+		}
 
 		var wrapper = document.createElement("div");
 		wrapper.className = 'swiper-wrapper';
@@ -118,20 +127,94 @@ Module.register("MMMT-Newsfeed",{
         	for (var i = 0; i < this.newsItems.length; i++) {
         		var elem = document.createElement("div");
         		elem.className = 'swiper-slide';
-        		elem.innerHTML = this.newsItems [i].title;
+        		// do your things here
+
+        		if (this.config.showSourceTitle || this.config.showPublishDate) {
+					var sourceAndTimestamp = document.createElement("div");
+					sourceAndTimestamp.className = "light small dimmed";
+
+					if (this.config.showSourceTitle && this.newsItems[i].sourceTitle !== "") {
+						sourceAndTimestamp.innerHTML = this.newsItems[i].sourceTitle;
+					}
+					if (this.config.showSourceTitle && this.newsItems[i].sourceTitle !== "" && this.config.showPublishDate) {
+						sourceAndTimestamp.innerHTML += ", ";
+					}
+					if (this.config.showPublishDate) {
+						sourceAndTimestamp.innerHTML += moment(new Date(this.newsItems[i].pubdate)).fromNow();
+					}
+					if (this.config.showSourceTitle && this.newsItems[i].sourceTitle !== "" || this.config.showPublishDate) {
+						sourceAndTimestamp.innerHTML += ":";
+					}
+
+					elem.appendChild(sourceAndTimestamp);
+				}
+
+				//Remove selected tags from the beginning of rss feed items (title or description)
+				if (this.config.removeStartTags == "title" || "both") {
+
+					for (f=0; f<this.config.startTags.length;f++) {
+						if (this.newsItems[i].title.slice(0,this.config.startTags[f].length) == this.config.startTags[f]) {
+							this.newsItems[i].title = this.newsItems[i].title.slice(this.config.startTags[f].length,this.newsItems[i].title.length);
+						}
+					}
+
+				}
+
+				if (this.config.removeStartTags == "description" || "both") {
+
+					if (this.config.showDescription) {
+						for (f=0; f<this.config.startTags.length;f++) {
+							if (this.newsItems[i].description.slice(0,this.config.startTags[f].length) == this.config.startTags[f]) {
+								this.newsItems[i].title = this.newsItems[i].description.slice(this.config.startTags[f].length,this.newsItems[i].description.length);
+							}
+						}
+					}
+
+				}
+
+				//Remove selected tags from the end of rss feed items (title or description)
+				if (this.config.removeEndTags) {
+					for (f=0; f<this.config.endTags.length;f++) {
+						if (this.newsItems[i].title.slice(-this.config.endTags[f].length)==this.config.endTags[f]) {
+							this.newsItems[i].title = this.newsItems[i].title.slice(0,-this.config.endTags[f].length);
+						}
+					}
+
+					if (this.config.showDescription) {
+						for (f=0; f<this.config.endTags.length;f++) {
+							if (this.newsItems[i].description.slice(-this.config.endTags[f].length)==this.config.endTags[f]) {
+								this.newsItems[i].description = this.newsItems[i].description.slice(0,-this.config.endTags[f].length);
+							}
+						}
+					}
+
+				}
+
+				var title = document.createElement("div");
+				title.className = "bright medium light";
+				title.innerHTML = this.newsItems[i].title;
+				elem.appendChild(title);
+
+				if (this.config.showDescription) {
+					var description = document.createElement("div");
+					description.className = "small light";
+					description.innerHTML = this.newsItems[i].description;
+					elem.appendChild(description);
+				}
+
+        		// append the div
         		wrapper.appendChild(elem);
         	}
-
-   //      	var elem = document.createElement("div");
-   //      	elem.className = 'swiper-button-prev';
-   //      	wrapper.appendChild(elem);
-
-			// elem = document.createElement("div");
-   //      	elem.className = 'swiper-button-next';
-        	wrapper.appendChild(elem);        	
         }
 
 		container.appendChild(wrapper);
+		var elem = document.createElement("div");
+    	elem.className = 'swiper-button-prev';
+    	container.appendChild(elem);
+
+		elem = document.createElement("div");
+    	elem.className = 'swiper-button-next';
+    	container.appendChild(elem);
 
 
 		return container;
