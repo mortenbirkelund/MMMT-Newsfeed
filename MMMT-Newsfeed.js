@@ -117,7 +117,10 @@ Module.register("MMMT-Newsfeed",{
 		var div = document.createElement("div");
 		div.style.display = "inline-block";
 		div.style.width = "90%";
-		
+		div.addEventListener("click", function () {					
+			self.sendNotification("OPEN_URL",url)
+ 
+		});
 		if (this.newsItems.length > 0) {
 
 			if (this.config.showSourceTitle || this.config.showPublishDate) {
